@@ -5,10 +5,13 @@
     margin: 50px auto;
     padding: 30px;
     border-radius: 25px;
+    box-shadow: 0 9px #999;
 }
-
+body{
+    font-family: roboto;
+}
 #screen{
-    background-color: white;
+    background-color: rgba(19, 59, 9, 0.384);
     border: solid 1px black;
     height: 100px;
     display: flex;
@@ -29,10 +32,33 @@
  border-radius: 30px;
  margin: 7px;
  border: solid 3px gray;
+ box-shadow: 0 9px #999;
 }
+
+.single-key:active{
+    box-shadow: 0 5px #666;
+}
+
+.single-key:hover{
+    background-color: darkblue;
+}
+
+.red-key:hover{
+    background: rgb(92, 1, 1);
+   }
+
+
+.operator:hover{
+    background: rgb(29, 24, 24);
+   }
+
 
 .red-key{
  background: darkred;
+}
+
+.operator{
+    background: black;
 }
 
 #number-container{
