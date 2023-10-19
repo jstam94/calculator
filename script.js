@@ -1,9 +1,22 @@
-let calculator = {
-    display: null,
-}
 
 let screen = document.querySelector('#screen')
-screen.textContent = calculator.display
+
+let calculator = {
+    display: null,
+    previousDisplay: null,
+    lastPressed: null,
+    updateScreen(){
+        screen.textContent = calculator.display
+    },
+    clear(){
+        this.display = null;
+        this.previousDisplay = null;
+        this.lastPressed = null;
+        this.updateScreen();
+    },
+}
+
+calculator.updateScreen();
 
 let numberKeys = document.querySelectorAll('.number')
 
@@ -16,12 +29,34 @@ function pressNumber(newNumber){
         screen.textContent = calculator.display;
         return;
     }
+    if (calculator.lastPressed === 'operator'){
+        calculator.display = `${calculator.display}` + ` ${newNumber}`;
+        screen.textContent = calculator.display
+        calculator.lastPressed = 'number'
+        return;
+    }
     calculator.display = `${calculator.display}` + `${newNumber}`;
     screen.textContent = calculator.display
+    calculator.lastPressed = 'number'
 }
 
 numberKeys.forEach((element) => element.addEventListener('click', () => pressNumber(element.textContent)))
 
+
+function pressOperator(operator){
+    if (calculator.display === null) return;
+    if (calculator.lastPressed == 'operator') return;
+    calculator.display = `${calculator.display} ${operator}`;
+    screen.textContent = calculator.display;
+    calculator.lastPressed = 'operator'
+    return;
+}
+
+let operatorKeys = document.querySelectorAll('.operator')
+operatorKeys.forEach((element) => element.addEventListener('click', () => pressOperator(element.textContent)))
+
+let clearKey = document.querySelector('#ce-key')
+clearKey.addEventListener('click', () => calculator.clear())
 
 // add = (operandA, operandB) => operandA + operandB;
 // subtract = (operandA, operandB) => operandA - operandB;
@@ -33,9 +68,9 @@ numberKeys.forEach((element) => element.addEventListener('click', () => pressNum
 // }
 
 
-// let operatorKeys = document.querySelectorAll('.operator')
+
 // let equalKey = document.querySelector('#equals-key')
-// let clearKey = document.querySelector('#ce-key')
+
 
 
 
