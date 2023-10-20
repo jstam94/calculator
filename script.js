@@ -1,88 +1,100 @@
+add = (a, b) => a + b
+subtract = (a, b) => a - b;
+multiply = (a, b) => a * b;
+divide = (a, b) => a / b;
+function operate(a,b, operator){
+    a = +a;
+    b = +b;
+    switch(operator){
+        case '+':
+            return add(a,b);
+        case '-':
+            return subtract(a,b)
+        case '*':
+            return multiply(a,b)
+        case '/':
+            return divide(a,b)
+            }
+}
 
-let screen = document.querySelector('#screen')
+let screenLeft = document.querySelector('#first-integer');
+let screenMiddle = document.querySelector('#operator');
+let screenRight= document.querySelector('#second-integer');
+let numberKeys = document.querySelectorAll('.number');
+let operatorKeys = document.querySelectorAll('.operator');
+let minusKey = document.querySelector('#minus-key')
+let clearKey = document.querySelector('#ce-key');
+let equalKey = document.querySelector('#equals-key')
+
 
 let calculator = {
-    display: null,
-    previousDisplay: null,
+    previousInteger: null,
+    currentInteger: null,
+    operator: null,
     lastPressed: null,
     updateScreen(){
-        screen.textContent = calculator.display
+        screenLeft.textContent = this.previousInteger;
+        screenMiddle.textContent = this.operator;
+        screenRight.textContent = this.currentInteger;
     },
-    clear(){
-        this.display = null;
-        this.previousDisplay = null;
-        this.lastPressed = null;
+    pressEquals(){
+        if(!this.previousInteger || !this.currentInteger) return;
+        this.previousInteger = operate(this.previousInteger, this.currentInteger, this.operator);
+        this.currentInteger = null;
+        this.operator = null;
         this.updateScreen();
     },
-}
-
-calculator.updateScreen();
-
-let numberKeys = document.querySelectorAll('.number')
-
-function pressNumber(newNumber){
-    if (calculator.display === null){
-        if(newNumber == 0){
+    clear(){
+        this.previousInteger = null;
+        this.currentInteger = null;
+        this.operator = null,
+        this.lastPressed = null,
+        this.updateScreen();
+    },
+    pressNumber(input){
+        if (this.currentInteger === null){
+            if(input == 0){
+                return;
+            }
+            this.currentInteger = input;
+            this.updateScreen();
             return;
         }
-        calculator.display = newNumber;
-        screen.textContent = calculator.display;
+        this.currentInteger = `${this.currentInteger}` + `${input}`;
+        this.lastPressed = 'number';
+        this.updateScreen();
         return;
     }
-    if (calculator.lastPressed === 'operator'){
-        calculator.display = `${calculator.display}` + ` ${newNumber}`;
-        screen.textContent = calculator.display
-        calculator.lastPressed = 'number'
-        return;
-    }
-    calculator.display = `${calculator.display}` + `${newNumber}`;
-    screen.textContent = calculator.display
-    calculator.lastPressed = 'number'
 }
-
-numberKeys.forEach((element) => element.addEventListener('click', () => pressNumber(element.textContent)))
 
 
 function pressOperator(operator){
-    if (calculator.display === null) return;
-    if (calculator.lastPressed == 'operator') return;
-    calculator.display = `${calculator.display} ${operator}`;
-    screen.textContent = calculator.display;
-    calculator.lastPressed = 'operator'
-    return;
+    if(calculator.previousInteger && calculator.currentInteger){
+        calculator.pressEquals();
+        calculator.operator = operator;
+        calculator.updateScreen();
+        return;
+    }
+    calculator.operator = operator;
+    calculator.updateScreen();
+    if(calculator.previousInteger === null){
+        calculator.previousInteger = calculator.currentInteger;
+        calculator.currentInteger  = null;
+        calculator.updateScreen();
+    } else{
+        operate(calculator.previousInteger, calculator.currentInteger, operator)
+        calculator.updateScreen()
+    }
+}  
+
+function pressMinus(){
+    if(calculator.previousInteger === null){
+        
+    }
 }
 
-let operatorKeys = document.querySelectorAll('.operator')
-operatorKeys.forEach((element) => element.addEventListener('click', () => pressOperator(element.textContent)))
-
-let clearKey = document.querySelector('#ce-key')
-clearKey.addEventListener('click', () => calculator.clear())
-
-// add = (operandA, operandB) => operandA + operandB;
-// subtract = (operandA, operandB) => operandA - operandB;
-// multiply = (operandA, operandB) => operandA * operandB;
-// divide = (operandA, operandB) => operandA / operandB;
-
-// function operate(operandA, operandB, operator){
-//     return operator(operandA, operandB);
-// }
-
-
-
-// let equalKey = document.querySelector('#equals-key')
-
-
-
-
-
-
-
-
-
-
-// operatorKeys.forEach((element) => element.addEventListener('click', () =>{
-//     alert(`I am a ${element.textContent} key`)
-// }));
-
-// equalKey.addEventListener('click', () => alert(`I am a ${equalKey.textContent} key`));
-// clearKey.addEventListener('click', () => alert(`I am a ${clearKey.textContent} key`));
+numberKeys.forEach((element) => element.addEventListener('click', () => calculator.pressNumber(element.textContent)));
+equalKey.addEventListener('click', () => calculator.pressEquals());
+operatorKeys.forEach((element) => element.addEventListener('click', () => pressOperator(element.textContent)));
+clearKey.addEventListener('click', () => calculator.clear());
+minusKey.addEventListener('click', () => alert('minus'));
