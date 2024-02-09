@@ -1,3 +1,6 @@
+// TO DO: FIX MINUS KEY BEHAVIOR, FIX OPERATION KEYS WHEN THERE IS NO INTEGERS, DECIMAL?
+
+
 add = (a, b) => a + b
 subtract = (a, b) => a - b;
 multiply = (a, b) => a * b;
@@ -87,14 +90,9 @@ function pressOperator(operator){
     }
 }  
 
-function pressMinus(){
-    if(calculator.previousInteger === null){
-        
-    }
-}
 
 numberKeys.forEach((element) => element.addEventListener('click', () => calculator.pressNumber(element.textContent)));
 equalKey.addEventListener('click', () => calculator.pressEquals());
 operatorKeys.forEach((element) => element.addEventListener('click', () => pressOperator(element.textContent)));
 clearKey.addEventListener('click', () => calculator.clear());
-minusKey.addEventListener('click', () => alert('minus'));
+
